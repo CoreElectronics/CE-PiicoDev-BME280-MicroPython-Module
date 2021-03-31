@@ -1,9 +1,8 @@
-""""
-A MicroPython class for the Core Electronics PiicoDev Atmospheric Sensor BME280
-Ported by Michael Ruppe at Core Electronics
-MAR 2021
-Original repo https://bit.ly/2yJwysL
-"""
+# A MicroPython class for the Core Electronics PiicoDev Atmospheric Sensor BME280
+# Ported by Michael Ruppe at Core Electronics
+# MAR 2021
+# Original repo https://bit.ly/2yJwysL
+
 
 import os
 _SYSNAME = os.uname().sysname
