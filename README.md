@@ -1,8 +1,10 @@
-# PiicoDev® VEML6030 MicroPython Module
+# PiicoDev® BME280 MicroPython Module
 
 This is the firmware repo for the Core Electronics [PiicoDev® Atmospheric Sensor BME280](https://core-electronics.com.au/catalog/product/view/sku/CE07503).
 
-See the [Quickstart Guide](https://core-electronics.com.au/tutorials/piicodev-atmospheric-sensor-bme280-quickstart-guide-for-rpi-pico.html)
+See the Quickstart Guides:
+- [Micro:bit v2](https://core-electronics.com.au/tutorials/piicodev-atmospheric-sensor-bme280-quickstart-guide-for-microbit.html)
+- [Raspberry Pi Pico](https://core-electronics.com.au/tutorials/piicodev-atmospheric-sensor-bme280-quickstart-guide-for-rpi-pico.html)
 
 This module has been tested on:
  - Micro:bit **v2** (does not work with v1 - not enough memory)
