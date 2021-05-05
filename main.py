@@ -3,10 +3,10 @@
 # from the PiicoDev Atmospheric Sensor. An altitude reading is also
 # available
 
-import bme280
+from PiicoDev_BME280 import PiicoDev_BME280
 from utime import sleep_ms
 
-sensor = bme280.BME280()
+sensor = PiicoDev_BME280()
 zeroAlt = sensor.altitude()
 
 while True:

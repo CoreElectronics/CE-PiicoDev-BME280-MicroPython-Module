@@ -4,17 +4,12 @@
 # Original repo https://bit.ly/2yJwysL
 
 
-import os
-_SYSNAME = os.uname().sysname
-if _SYSNAME == 'microbit':
-    from microbit import i2c
-else:
-    from machine import I2C
-    i2c = I2C(0)
+from PiicoDev_Unified import *
+i2c = PiicoDev_Unified_I2C()
 
 from utime import sleep
 
-class BME280:
+class PiicoDev_BME280:
 
     def __init__(self, i2c=i2c, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
 
@@ -23,15 +18,7 @@ class BME280:
         self.h_mode = h_mode
         self.iir = iir
         self.addr = address
-        self._i2c = i2c
-
-        # Unify I2C syntax between machine & micro:bit
-        if _SYSNAME == 'microbit':
-            self.i2cWrite = self._i2c.write
-            self.i2cRead = self._i2c.read
-        else:
-            self.i2cWrite = self._i2c.writeto
-            self.i2cRead = self._i2c.readfrom
+        self.i2c = i2c
 
         self._t_fine = 0
         self._T1 = self._read16(0x88)
@@ -62,17 +49,17 @@ class BME280:
         self._write8(0xF5, self.iir<<2)
 
     def _read8(self, reg):
-        self.i2cWrite(self.addr, bytearray([reg]))
-        t = self.i2cRead(self.addr, 1)
+        self.i2c.UnifiedWrite(self.addr, bytearray([reg]))
+        t = self.i2c.UnifiedRead(self.addr, 1)
         return t[0]
 
     def _read16(self, reg):
-        self.i2cWrite(self.addr, bytearray([reg]))
-        t = self.i2cRead(self.addr, 2)
+        self.i2c.UnifiedWrite(self.addr, bytearray([reg]))
+        t = self.i2c.UnifiedRead(self.addr, 2)
         return t[0]+t[1]*256
 
     def _write8(self, reg, dat):
-        self.i2cWrite(self.addr, bytearray([reg, dat]))
+        self.i2c.UnifiedWrite(self.addr, bytearray([reg, dat]))
 
     def _short(self, dat):
         if dat > 32767:
