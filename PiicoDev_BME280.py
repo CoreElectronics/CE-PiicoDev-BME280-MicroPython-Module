@@ -7,8 +7,6 @@
 from PiicoDev_Unified import *
 i2c = PiicoDev_Unified_I2C()
 
-from utime import sleep
-
 class PiicoDev_BME280:
 
     def __init__(self, i2c=i2c, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
@@ -43,23 +41,21 @@ class PiicoDev_BME280:
         if self._H6 > 127:
             self._H6 -= 256
         self._write8(0xF2, self.h_mode)
-        sleep(0.002)
+        sleep_ms(2)
         self._write8(0xF4, 0x24)
-        sleep(0.002)
+        sleep_ms(2)
         self._write8(0xF5, self.iir<<2)
 
     def _read8(self, reg):
-        self.i2c.UnifiedWrite(self.addr, bytearray([reg]))
-        t = self.i2c.UnifiedRead(self.addr, 1)
+        t = self.i2c.readfrom_mem(self.addr, reg, 1)
         return t[0]
 
     def _read16(self, reg):
-        self.i2c.UnifiedWrite(self.addr, bytearray([reg]))
-        t = self.i2c.UnifiedRead(self.addr, 2)
+        t = self.i2c.readfrom_mem(self.addr, reg, 2)
         return t[0]+t[1]*256
 
     def _write8(self, reg, dat):
-        self.i2c.UnifiedWrite(self.addr, bytearray([reg, dat]))
+        self.i2c.write8(self.addr, bytes([reg]), bytes([dat]))
 
     def _short(self, dat):
         if dat > 32767:
@@ -76,9 +72,9 @@ class PiicoDev_BME280:
             sleep_time += 575+(2300*(1<<self.p_mode))
         if self.h_mode in [1, 2, 3, 4, 5]:
             sleep_time += 575+(2300*(1<<self.h_mode))
-        sleep(sleep_time/1000000)
+        sleep_ms(1+sleep_time//1000)
         while(self._read16(0xF3) & 0x08):
-            sleep(0.001)
+            sleep_ms(1)
         raw_p = ((self._read8(0xF7)<<16)|(self._read8(0xF8)<<8)|self._read8(0xF9))>>4
         raw_t = ((self._read8(0xFA)<<16)|(self._read8(0xFB)<<8)|self._read8(0xFC))>>4
         raw_h = (self._read8(0xFD) << 8)| self._read8(0xFE)
