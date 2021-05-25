@@ -4,17 +4,10 @@
 # Original repo https://bit.ly/2yJwysL
 
 
-import os
-_SYSNAME = os.uname().sysname
-if _SYSNAME == 'microbit':
-    from microbit import i2c
-else:
-    from machine import I2C
-    i2c = I2C(0)
+from PiicoDev_Unified import *
+i2c = PiicoDev_Unified_I2C()
 
-from utime import sleep
-
-class BME280:
+class PiicoDev_BME280:
 
     def __init__(self, i2c=i2c, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
 
@@ -23,15 +16,7 @@ class BME280:
         self.h_mode = h_mode
         self.iir = iir
         self.addr = address
-        self._i2c = i2c
-
-        # Unify I2C syntax between machine & micro:bit
-        if _SYSNAME == 'microbit':
-            self.i2cWrite = self._i2c.write
-            self.i2cRead = self._i2c.read
-        else:
-            self.i2cWrite = self._i2c.writeto
-            self.i2cRead = self._i2c.readfrom
+        self.i2c = i2c
 
         self._t_fine = 0
         self._T1 = self._read16(0x88)
@@ -56,23 +41,21 @@ class BME280:
         if self._H6 > 127:
             self._H6 -= 256
         self._write8(0xF2, self.h_mode)
-        sleep(0.002)
+        sleep_ms(2)
         self._write8(0xF4, 0x24)
-        sleep(0.002)
+        sleep_ms(2)
         self._write8(0xF5, self.iir<<2)
 
     def _read8(self, reg):
-        self.i2cWrite(self.addr, bytearray([reg]))
-        t = self.i2cRead(self.addr, 1)
+        t = self.i2c.readfrom_mem(self.addr, reg, 1)
         return t[0]
 
     def _read16(self, reg):
-        self.i2cWrite(self.addr, bytearray([reg]))
-        t = self.i2cRead(self.addr, 2)
+        t = self.i2c.readfrom_mem(self.addr, reg, 2)
         return t[0]+t[1]*256
 
     def _write8(self, reg, dat):
-        self.i2cWrite(self.addr, bytearray([reg, dat]))
+        self.i2c.write8(self.addr, bytes([reg]), bytes([dat]))
 
     def _short(self, dat):
         if dat > 32767:
@@ -89,9 +72,9 @@ class BME280:
             sleep_time += 575+(2300*(1<<self.p_mode))
         if self.h_mode in [1, 2, 3, 4, 5]:
             sleep_time += 575+(2300*(1<<self.h_mode))
-        sleep(sleep_time/1000000)
+        sleep_ms(1+sleep_time//1000)
         while(self._read16(0xF3) & 0x08):
-            sleep(0.001)
+            sleep_ms(1)
         raw_p = ((self._read8(0xF7)<<16)|(self._read8(0xF8)<<8)|self._read8(0xF9))>>4
         raw_t = ((self._read8(0xFA)<<16)|(self._read8(0xFB)<<8)|self._read8(0xFC))>>4
         raw_h = (self._read8(0xFD) << 8)| self._read8(0xFE)
