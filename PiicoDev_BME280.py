@@ -5,18 +5,16 @@
 
 
 from PiicoDev_Unified import *
-i2c = PiicoDev_Unified_I2C()
 
 class PiicoDev_BME280:
 
-    def __init__(self, i2c=i2c, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
-
+    def __init__(self, bus=None, freq=None, sda=None, scl=None, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
+        self.i2c = create_unified_i2c(bus=bus, freq=freq, sda=sda, scl=scl)
         self.t_mode = t_mode
         self.p_mode = p_mode
         self.h_mode = h_mode
         self.iir = iir
         self.addr = address
-        self.i2c = i2c
 
         self._t_fine = 0
         self._T1 = self._read16(0x88)
