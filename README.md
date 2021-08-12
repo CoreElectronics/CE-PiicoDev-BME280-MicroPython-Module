@@ -2,6 +2,8 @@
 
 This is the firmware repo for the Core Electronics [PiicoDev® Atmospheric Sensor BME280](https://core-electronics.com.au/catalog/product/view/sku/CE07503).
 
+This module depends on the [PiicoDev Unified Library](https://github.com/CoreElectronics/CE-PiicoDev-Unified).
+
 See the Quickstart Guides:
 - [Micro:bit v2](https://core-electronics.com.au/tutorials/piicodev-atmospheric-sensor-bme280-quickstart-guide-for-microbit.html)
 - [Raspberry Pi Pico](https://core-electronics.com.au/tutorials/piicodev-atmospheric-sensor-bme280-quickstart-guide-for-rpi-pico.html)
