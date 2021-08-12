@@ -58,7 +58,7 @@ pressure_sea_level | float | any | 1013.25 | Enter the current sea level pressur
 returned | float | | | Altitude (m)
 
 
-## PiicoDev_BME280.values()
+### PiicoDev_BME280.values()
 
 Parameter | Type | Description
 --- | --- | ---
