@@ -1,4 +1,4 @@
-# A MicroPython class for the Core Electronics PiicoDev Atmospheric Sensor BME280
+# A MicroPython class for the Core Electronics PiicoDev Atmospheric Sensor BME280 
 # Ported by Michael Ruppe at Core Electronics
 # MAR 2021
 # Original repo https://bit.ly/2yJwysL
