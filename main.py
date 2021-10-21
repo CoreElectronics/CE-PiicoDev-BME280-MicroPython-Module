@@ -16,5 +16,5 @@ while True:
     print(str(tempC)+" °C  " + str(pres_hPa)+" hPa  " + str(humRH)+" %RH")
     
     # Altitude demo
-#    print(sensor.altitude() - zeroAlt) # Print the pressure CHANGE since the script began
+#     print(sensor.altitude() - zeroAlt) # Print the pressure CHANGE since the script began
     sleep_ms(100)
