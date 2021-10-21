@@ -12,7 +12,7 @@ See the Quickstart Guides:
 # Usage
 ## Simple Example
 [main.py](https://github.com/CoreElectronics/CE-PiicoDev-BME280-MicroPython-Module/blob/main/main.py) is a simple example to get started.
-```
+```python
 from PiicoDev_BME280 import PiicoDev_BME280
 from PiicoDev_Unified import sleep_ms # cross-platform compatible sleep function
 
