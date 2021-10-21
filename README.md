@@ -14,29 +14,44 @@ See the Quickstart Guides:
 [main.py](https://github.com/CoreElectronics/CE-PiicoDev-BME280-MicroPython-Module/blob/main/main.py) is a simple example to get started.
 ```
 from PiicoDev_BME280 import PiicoDev_BME280
-from time import sleep
-sensor = PiicoDev_BME280()
+from PiicoDev_Unified import sleep_ms # cross-platform compatible sleep function
+
+sensor = PiicoDev_BME280() # initialise the sensor
+
 while True:
-    tempC, presPa, humRH = sensor.values()
-    pres_hPa = presPa / 100
+    tempC, presPa, humRH = sensor.values() # read all data
+    pres_hPa = presPa / 100 # convert Pascals to hPa (mbar)
     print(str(tempC)+" °C  " + str(pres_hPa)+" hPa  " + str(humRH)+" %RH")
-    sleep(0.1)
+    sleep_ms(100)
 ```
 ## Advanced Example
-```
+
+This example sets oversampling modes, filtering, and a local mean-sea-level-pressure.
+
+```python
 from PiicoDev_BME280 import PiicoDev_BME280
-from time import sleep
-sdaPin=machine.Pin(6)
-sclPin=machine.Pin(7)
-sensor = PiicoDev_BME280(bus=1, freq=100000, sda=sdaPin, scl=sclPin, t_mode=2, p_mode=5, h_mode=1,iir=2, address=0x77)
+from PiicoDev_Unified import sleep_ms # cross-platform compatible sleep function
+
+sensor = PiicoDev_BME280(t_mode=2, p_mode=5, h_mode=1,iir=2)
 zeroAlt = sensor.altitude(pressure_sea_level=1013.25)
 while True:
     tempC, presPa, humRH = sensor.values()
     pres_hPa = presPa / 100
     print(str(tempC)+" °C  " + str(pres_hPa)+" hPa  " + str(humRH)+" %RH")
-    print(sensor.altitude() - zeroAlt)
-    sleep(0.1)
+    print(sensor.altitude() - zeroAlt) # show the CHANGE in altitude, since the script began
+    sleep_ms(100)
 ```
+
+## Changing default I2C configuration (Raspberry Pi Pico Only)
+
+You can initialise the sensor with different I2C settings (frequency, bus, pins) by eg.
+```
+sdaPin=machine.Pin(6)
+sclPin=machine.Pin(7)
+
+sensor = PiicoDev_BME280(bus=1, freq=100000, sda=sdaPin, scl=sclPin, address=0x77)
+```
+
 ## Details
 ### PiicoDev_BME280(bus=, freq=, sda=, scl=, t_mode=2, p_mode=5, h_mode=1,iir=1, address=0x77)
 
