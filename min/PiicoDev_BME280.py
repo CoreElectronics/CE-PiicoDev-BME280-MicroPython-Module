@@ -7,7 +7,10 @@ class PiicoDev_BME280:
 			if compat_ind>=1:0
 			else:print(compat_str)
 		except:print(compat_str)
-		self.i2c=create_unified_i2c(bus=bus,freq=freq,sda=sda,scl=scl);self.t_mode=t_mode;self.p_mode=p_mode;self.h_mode=h_mode;self.iir=iir;self.addr=address;self._t_fine=0;self._T1=self._read16(136);self._T2=self._short(self._read16(138));self._T3=self._short(self._read16(140));self._P1=self._read16(142);self._P2=self._short(self._read16(144));self._P3=self._short(self._read16(146));self._P4=self._short(self._read16(148));self._P5=self._short(self._read16(150));self._P6=self._short(self._read16(152));self._P7=self._short(self._read16(154));self._P8=self._short(self._read16(156));self._P9=self._short(self._read16(158));self._H1=self._read8(161);self._H2=self._short(self._read16(225));self._H3=self._read8(227);a=self._read8(229);self._H4=(self._read8(228)<<4)+a%16;self._H5=(self._read8(230)<<4)+(a>>4);self._H6=self._read8(231)
+		self.i2c=create_unified_i2c(bus=bus,freq=freq,sda=sda,scl=scl);self.t_mode=t_mode;self.p_mode=p_mode;self.h_mode=h_mode;self.iir=iir;self.addr=address;self._t_fine=0
+		try:self._T1=self._read16(136)
+		except Exception as e:print(i2c_err_str.format(self.addr));raise e
+		self._T2=self._short(self._read16(138));self._T3=self._short(self._read16(140));self._P1=self._read16(142);self._P2=self._short(self._read16(144));self._P3=self._short(self._read16(146));self._P4=self._short(self._read16(148));self._P5=self._short(self._read16(150));self._P6=self._short(self._read16(152));self._P7=self._short(self._read16(154));self._P8=self._short(self._read16(156));self._P9=self._short(self._read16(158));self._H1=self._read8(161);self._H2=self._short(self._read16(225));self._H3=self._read8(227);a=self._read8(229);self._H4=(self._read8(228)<<4)+a%16;self._H5=(self._read8(230)<<4)+(a>>4);self._H6=self._read8(231)
 		if self._H6>127:self._H6-=256
 		self._write8(242,self.h_mode);sleep_ms(2);self._write8(244,36);sleep_ms(2);self._write8(245,self.iir<<2)
 	def _read8(self,reg):t=self.i2c.readfrom_mem(self.addr,reg,1);return t[0]
