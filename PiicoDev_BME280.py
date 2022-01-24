@@ -8,22 +8,22 @@ from PiicoDev_Unified import *
 compat_str = '\nUnified PiicoDev library out of date.  Get the latest module: https://piico.dev/unified \n'
 
 class PiicoDev_BME280:
-
-    def __init__(self, bus=None, freq=None, sda=None, scl=None, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
+    def __init__(self, asw=None, bus=None, freq=None, sda=None, scl=None, t_mode=2, p_mode=5, h_mode=1, iir=1, address=0x77):
         try:
-            if compat_ind >= 1:
+            if compat_ind >= 1.1:
                 pass
             else:
                 print(compat_str)
         except:
             print(compat_str)
         self.i2c = create_unified_i2c(bus=bus, freq=freq, sda=sda, scl=scl)
+        self.addr = initialise_address(switches=asw, candidate_addresses=[address, 0x76])
+        
         self.t_mode = t_mode
         self.p_mode = p_mode
         self.h_mode = h_mode
         self.iir = iir
-        self.addr = address
-
+        
         self._t_fine = 0
         try:
             self._T1 = self._read16(0x88)
